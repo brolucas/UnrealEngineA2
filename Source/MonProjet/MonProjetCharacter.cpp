@@ -141,5 +141,8 @@ void AMonProjetCharacter::MoveRight(float Value)
 }
 void AMonProjetCharacter::TakeDg(int deg) {
 	Health -= deg;
-	
+
+}
+void AMonProjetCharacter::Healu(int Amount) {
+	Health += Amount;
 }

@@ -74,5 +74,8 @@ public:
 
 	UFUNCTION()
 	void TakeDg(int deg);
+
+	UFUNCTION()
+	void Healu(int Amount);
 };
 
