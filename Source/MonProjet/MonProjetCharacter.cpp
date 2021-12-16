@@ -46,6 +46,7 @@ AMonProjetCharacter::AMonProjetCharacter()
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 	Health = 100;
+	JumpHeight = 600.f;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -55,7 +56,7 @@ void AMonProjetCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMonProjetCharacter::DoubleJump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMonProjetCharacter::MoveForward);
@@ -75,6 +76,11 @@ void AMonProjetCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AMonProjetCharacter::OnResetVR);
+}
+
+void AMonProjetCharacter::Landed(const FHitResult& Hit)
+{
+	DoubleJumpCOunter = 0;
 }
 
 
@@ -145,4 +151,12 @@ void AMonProjetCharacter::TakeDg(int deg) {
 }
 void AMonProjetCharacter::Healu(int Amount) {
 	Health += Amount;
+}
+
+void AMonProjetCharacter::DoubleJump()
+{
+	if (DoubleJumpCOunter <= 1) {
+		ACharacter::LaunchCharacter(FVector(0, 0, JumpHeight), false, true);
+		DoubleJumpCOunter++;
+	}
 }

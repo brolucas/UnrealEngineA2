@@ -61,11 +61,13 @@ protected:
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 
+	void CheckJump();
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
-
+	virtual void Landed(const FHitResult& Hit)override;
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
@@ -77,5 +79,16 @@ public:
 
 	UFUNCTION()
 	void Healu(int Amount);
+
+	UFUNCTION()
+	void DoubleJump();
+
+	UPROPERTY()
+	int DoubleJumpCOunter;
+
+	UPROPERTY()
+	float JumpHeight;
+
+
 };
 
