@@ -36,4 +36,11 @@ public:
 
 	UFUNCTION()
 	void FireInDirection(const FVector& ShootDirection);
+
+	// Projectile mesh
+	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
+	UStaticMeshComponent* ProjectileMeshComponent;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = Movement)
+	UMaterialInstanceDynamic* ProjectileMaterialInstance;
 };
