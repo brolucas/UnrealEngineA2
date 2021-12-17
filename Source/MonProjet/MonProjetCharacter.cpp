@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "DrawDebugHelpers.h"
 
 
 
@@ -61,6 +62,9 @@ void AMonProjetCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMonProjetCharacter::DoubleJump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	// Pick Up
+	PlayerInputComponent->BindAction("Pick_Up", IE_Pressed, this, &AMonProjetCharacter::PickUp);
+
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMonProjetCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMonProjetCharacter::MoveRight);
@@ -179,4 +183,26 @@ void AMonProjetCharacter::Respawn()
 	//SpawnDefaultController();
 	Health = 100;
 	SetActorLocation(RespawnLoc);
+}
+
+void AMonProjetCharacter::PickUp()
+{
+	FHitResult OutHit;
+	FVector Start = FollowCamera->GetComponentLocation();
+
+	FVector ForwardVector = FollowCamera->GetForwardVector();
+	FVector End = ((ForwardVector * 1000.f) + Start);
+	FCollisionQueryParams CollisionParams;
+
+	DrawDebugLine(GetWorld(), Start, End, FColor::Green, true);
+
+	if (GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams))
+	{
+		if (OutHit.bBlockingHit)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
+			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Purple, FString::Printf(TEXT("Impact Point: %s"), *OutHit.ImpactPoint.ToString()));
+			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Blue, FString::Printf(TEXT("Normal Point: %s"), *OutHit.ImpactNormal.ToString()));
+		}
+	}
 }

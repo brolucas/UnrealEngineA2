@@ -97,5 +97,9 @@ public:
 	void Respawn();
 
 
+	UFUNCTION()
+	void PickUp();
+
+
 };
 
