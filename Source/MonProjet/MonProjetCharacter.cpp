@@ -47,6 +47,7 @@ AMonProjetCharacter::AMonProjetCharacter()
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 	Health = 100;
 	JumpHeight = 600.f;
+	RespawnLoc = FVector(-970.0f, -346.44342f, 202.000671f);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -148,6 +149,10 @@ void AMonProjetCharacter::MoveRight(float Value)
 void AMonProjetCharacter::TakeDg(int deg) {
 	Health -= deg;
 
+	if (Health <= 0) {
+		Kill();
+	}
+
 }
 void AMonProjetCharacter::Healu(int Amount) {
 	Health += Amount;
@@ -159,4 +164,16 @@ void AMonProjetCharacter::DoubleJump()
 		ACharacter::LaunchCharacter(FVector(0, 0, JumpHeight), false, true);
 		DoubleJumpCOunter++;
 	}
+}
+
+void AMonProjetCharacter::Kill()
+{
+	//Destroy();
+	Respawn();
+}
+
+void AMonProjetCharacter::Respawn()
+{
+	Health = 100;
+	SetActorLocation(RespawnLoc);
 }

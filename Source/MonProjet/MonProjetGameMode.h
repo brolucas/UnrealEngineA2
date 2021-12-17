@@ -13,6 +13,7 @@ class AMonProjetGameMode : public AGameModeBase
 
 public:
 	AMonProjetGameMode();
+
 };
 
 

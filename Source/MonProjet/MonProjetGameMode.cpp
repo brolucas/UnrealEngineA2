@@ -3,6 +3,7 @@
 #include "MonProjetGameMode.h"
 #include "MonProjetCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include <Runtime/Engine/Classes/Kismet/GameplayStatics.h>
 
 AMonProjetGameMode::AMonProjetGameMode()
 {
@@ -13,3 +14,4 @@ AMonProjetGameMode::AMonProjetGameMode()
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
 }
+

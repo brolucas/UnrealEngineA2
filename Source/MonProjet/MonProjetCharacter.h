@@ -61,7 +61,6 @@ protected:
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 
-	void CheckJump();
 
 protected:
 	// APawn interface
@@ -88,6 +87,14 @@ public:
 
 	UPROPERTY()
 	float JumpHeight;
+
+	UPROPERTY(EditAnywhere)
+	FVector RespawnLoc;
+	
+	UFUNCTION()
+	void Kill();
+	UFUNCTION()
+	void Respawn();
 
 
 };
