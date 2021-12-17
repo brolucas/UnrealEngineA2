@@ -9,8 +9,6 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 
-
-
 //////////////////////////////////////////////////////////////////////////
 // AMonProjetCharacter
 
@@ -176,7 +174,6 @@ void AMonProjetCharacter::Kill()
 
 void AMonProjetCharacter::Respawn()
 {
-	//SpawnDefaultController();
 	Health = 100;
 	SetActorLocation(RespawnLoc);
 }
