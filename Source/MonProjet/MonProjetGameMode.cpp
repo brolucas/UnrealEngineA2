@@ -13,5 +13,6 @@ AMonProjetGameMode::AMonProjetGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+	
 }
 
