@@ -55,6 +55,9 @@ AMonProjetCharacter::AMonProjetCharacter()
 	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
 	SceneComponent->SetupAttachment(RootComponent);
 
+	proj = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile"));
+	
+
 
 	TraceDistance = 2000.0f;
 }
@@ -125,6 +128,8 @@ void AMonProjetCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	// Pick Up
 	PlayerInputComponent->BindAction("Pick_Up", IE_Pressed, this, &AMonProjetCharacter::InteractPressed);
+	// TAG
+	PlayerInputComponent->BindAction("Tag", IE_Pressed, this, &AMonProjetCharacter::Tag);
 
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMonProjetCharacter::MoveForward);
@@ -151,6 +156,10 @@ void AMonProjetCharacter::Landed(const FHitResult& Hit)
 	DoubleJumpCOunter = 0;
 }
 
+
+void AMonProjetCharacter::Tag()
+{
+}
 
 void AMonProjetCharacter::OnResetVR()
 {

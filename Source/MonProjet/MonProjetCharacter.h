@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include <Runtime/Engine/Classes/GameFramework/ProjectileMovementComponent.h>
 #include "MonProjetCharacter.generated.h"
 
 UCLASS(config=Game)
@@ -37,6 +38,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool isGrab = false;
+
+	UFUNCTION()
+	void Tag();
 
 protected:
 
@@ -106,6 +110,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	FVector RespawnLoc;
+
+	UPROPERTY(EditAnywhere)
+	UProjectileMovementComponent* proj;
 	
 	UFUNCTION()
 	void Kill();
