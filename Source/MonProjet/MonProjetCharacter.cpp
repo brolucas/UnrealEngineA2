@@ -51,10 +51,71 @@ AMonProjetCharacter::AMonProjetCharacter()
 	Health = 100;
 	JumpHeight = 600.f;
 	RespawnLoc = FVector(-970.0f, -346.44342f, 202.000671f);
+	
+	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
+	SceneComponent->SetupAttachment(RootComponent);
+
+
+	TraceDistance = 2000.0f;
 }
 
 //////////////////////////////////////////////////////////////////////////
 // Input
+
+
+void AMonProjetCharacter::TraceForward_Implementation()
+{
+	FVector Loc;
+	FRotator Rot;
+	FHitResult Hit(ForceInit);
+
+	//Obtenir le point de vue du joueur
+	GetController()->GetPlayerViewPoint(Loc, Rot);
+	//Stocker ce point de vue au depart 
+
+	FVector Start = Loc;
+	FVector End = Start + (Rot.Vector() * TraceDistance);
+
+
+	FCollisionQueryParams TraceParams = FCollisionQueryParams(FName(TEXT("Trace")), false, this);
+	//ECC visibilité signifi que le trait sera sur le chanel visible quand il s'agir de colision ou encore sur la visibilté de la camera
+	bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, TraceParams);
+
+	DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f);
+
+
+	//si on touche ou non
+	if (bHit && Hit.GetActor()->IsRootComponentMovable())
+	{
+		DrawDebugBox(GetWorld(), Hit.ImpactPoint, FVector(5, 5, 5), FColor::Emerald, false, 2.0f);
+
+		if (!isGrab)
+		{
+
+			FAttachmentTransformRules attach(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true);
+			Hit.GetActor()->AttachToComponent(SceneComponent, attach, NAME_None);
+			UStaticMeshComponent* StaticMesh = Cast<UStaticMeshComponent>(Hit.GetActor()->GetComponentByClass(UStaticMeshComponent::StaticClass()));
+			if (StaticMesh == nullptr)
+				return;
+
+			StaticMesh->SetSimulatePhysics(false);
+
+			isGrab = true;
+		}
+		else
+		{
+			FDetachmentTransformRules Dettach(EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, false);
+			Hit.GetActor()->DetachAllSceneComponents(SceneComponent, Dettach);
+			UStaticMeshComponent* StaticMesh = Cast<UStaticMeshComponent>(Hit.GetActor()->GetComponentByClass(UStaticMeshComponent::StaticClass()));
+			if (StaticMesh == nullptr)
+				return;
+
+			StaticMesh->SetSimulatePhysics(true);
+
+			isGrab = false;
+		}
+	}
+}
 
 void AMonProjetCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
@@ -63,7 +124,7 @@ void AMonProjetCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMonProjetCharacter::DoubleJump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	// Pick Up
-	PlayerInputComponent->BindAction("Pick_Up", IE_Pressed, this, &AMonProjetCharacter::PickUp);
+	PlayerInputComponent->BindAction("Pick_Up", IE_Pressed, this, &AMonProjetCharacter::InteractPressed);
 
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMonProjetCharacter::MoveForward);
@@ -110,6 +171,11 @@ void AMonProjetCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Lo
 void AMonProjetCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
 {
 		StopJumping();
+}
+
+void AMonProjetCharacter::InteractPressed()
+{
+	TraceForward();
 }
 
 void AMonProjetCharacter::TurnAtRate(float Rate)
@@ -185,24 +251,4 @@ void AMonProjetCharacter::Respawn()
 	SetActorLocation(RespawnLoc);
 }
 
-void AMonProjetCharacter::PickUp()
-{
-	FHitResult OutHit;
-	FVector Start = FollowCamera->GetComponentLocation();
 
-	FVector ForwardVector = FollowCamera->GetForwardVector();
-	FVector End = ((ForwardVector * 1000.f) + Start);
-	FCollisionQueryParams CollisionParams;
-
-	DrawDebugLine(GetWorld(), Start, End, FColor::Green, true);
-
-	if (GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams))
-	{
-		if (OutHit.bBlockingHit)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Purple, FString::Printf(TEXT("Impact Point: %s"), *OutHit.ImpactPoint.ToString()));
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Blue, FString::Printf(TEXT("Normal Point: %s"), *OutHit.ImpactNormal.ToString()));
-		}
-	}
-}

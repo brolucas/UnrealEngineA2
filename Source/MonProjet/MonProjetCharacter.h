@@ -32,6 +32,12 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Values")
 	int Health;
 
+	UPROPERTY(EditAnywhere)
+	class USceneComponent* SceneComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool isGrab = false;
+
 protected:
 
 	/** Resets HMD orientation in VR. */
@@ -60,6 +66,16 @@ protected:
 
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
+
+	void InteractPressed();
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
+	float TraceDistance;
+
+	UFUNCTION(BlueprintNativeEvent)
+	void TraceForward();
+	void TraceForward_Implementation();
 
 
 protected:
@@ -95,10 +111,6 @@ public:
 	void Kill();
 	UFUNCTION()
 	void Respawn();
-
-
-	UFUNCTION()
-	void PickUp();
 
 
 };
