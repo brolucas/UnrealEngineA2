@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include <Runtime/Engine/Classes/GameFramework/ProjectileMovementComponent.h>
+#include "Proj.h"
 #include "MonProjetCharacter.generated.h"
 
 UCLASS(config=Game)
@@ -41,6 +42,13 @@ public:
 
 	UFUNCTION()
 	void Tag();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	FVector MuzzleOffset;
+
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class AProj> ProjectileClass;
+
 
 protected:
 
