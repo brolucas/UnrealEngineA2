@@ -43,4 +43,7 @@ public:
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Movement)
 	UMaterialInstanceDynamic* ProjectileMaterialInstance;
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 };

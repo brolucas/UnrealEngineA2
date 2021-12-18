@@ -29,10 +29,10 @@ AProj::AProj()
 		ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 		ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
 		ProjectileMovementComponent->InitialSpeed = 3000.0f;
-		ProjectileMovementComponent->MaxSpeed = 3000.0f;
+		ProjectileMovementComponent->MaxSpeed = 4000.0f;
 		ProjectileMovementComponent->bRotationFollowsVelocity = true;
-		ProjectileMovementComponent->bShouldBounce = true;
-		ProjectileMovementComponent->Bounciness = 0.3f;
+		ProjectileMovementComponent->bShouldBounce = false;
+		ProjectileMovementComponent->Bounciness = 0.0f;
 		ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
 	}
 	if (!ProjectileMeshComponent)
@@ -52,8 +52,14 @@ AProj::AProj()
 	ProjectileMeshComponent->SetMaterial(0, ProjectileMaterialInstance);
 	ProjectileMeshComponent->SetRelativeScale3D(FVector(0.09f, 0.09f, 0.09f));
 	ProjectileMeshComponent->SetupAttachment(RootComponent);
-
 	InitialLifeSpan = 3.0f;
+
+	// Set the sphere's collision profile name to "Projectile".
+	CollisionComponent->BodyInstance.SetCollisionProfileName(TEXT("Proj"));
+	CollisionComponent->OnComponentHit.AddDynamic(this, &AProj::OnHit);
+
+
+
 }
 
 // Called when the game starts or when spawned
@@ -73,5 +79,9 @@ void AProj::Tick(float DeltaTime)
 void AProj::FireInDirection(const FVector& ShootDirection)
 {
 	ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
+}
+
+void AProj::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+{
 }
 
