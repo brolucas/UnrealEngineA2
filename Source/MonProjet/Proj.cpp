@@ -44,7 +44,7 @@ AProj::AProj()
 			ProjectileMeshComponent->SetStaticMesh(Mesh.Object);
 		}
 	}
-	static ConstructorHelpers::FObjectFinder<UMaterial>Material(TEXT("[ADD MATERIAL ASSET REFERENCE]"));
+	static ConstructorHelpers::FObjectFinder<UMaterial>Material(TEXT("'Material'/Game/Sphere_MAt.Sphere_MAt'"));
 	if (Material.Succeeded())
 	{
 		ProjectileMaterialInstance = UMaterialInstanceDynamic::Create(Material.Object, ProjectileMeshComponent);
@@ -52,6 +52,8 @@ AProj::AProj()
 	ProjectileMeshComponent->SetMaterial(0, ProjectileMaterialInstance);
 	ProjectileMeshComponent->SetRelativeScale3D(FVector(0.09f, 0.09f, 0.09f));
 	ProjectileMeshComponent->SetupAttachment(RootComponent);
+
+	InitialLifeSpan = 3.0f;
 }
 
 // Called when the game starts or when spawned
