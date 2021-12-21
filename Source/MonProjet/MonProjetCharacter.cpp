@@ -124,7 +124,7 @@ void AMonProjetCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMonProjetCharacter::DoubleJump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AMonProjetCharacter::EndJump);
 	// Pick Up
 	PlayerInputComponent->BindAction("Pick_Up", IE_Pressed, this, &AMonProjetCharacter::InteractPressed);
 	// TAG
@@ -281,6 +281,14 @@ void AMonProjetCharacter::DoubleJump()
 		ACharacter::LaunchCharacter(FVector(0, 0, JumpHeight), false, true);
 		DoubleJumpCOunter++;
 	}
+	IsJumping = true;
+	
+}
+
+void AMonProjetCharacter::EndJump()
+{
+	StopJumping();
+	IsJumping = false;
 }
 
 void AMonProjetCharacter::Kill()

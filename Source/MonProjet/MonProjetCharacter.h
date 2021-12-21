@@ -111,6 +111,12 @@ public:
 	void DoubleJump();
 
 	UPROPERTY()
+	bool IsJumping;
+
+	UFUNCTION()
+	void EndJump();
+
+	UPROPERTY()
 	int DoubleJumpCOunter;
 
 	UPROPERTY()
