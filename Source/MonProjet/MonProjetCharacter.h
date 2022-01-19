@@ -31,7 +31,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
-	UPROPERTY(VisibleAnywhere, Category = "Values")
+	UPROPERTY(VisibleAnywhere, Category = "Values", BlueprintReadWrite)
 	int Health;
 
 	UPROPERTY(EditAnywhere)
