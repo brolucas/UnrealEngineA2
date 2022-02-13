@@ -267,7 +267,7 @@ void AMonProjetCharacter::TakeDg(int deg) {
 	Health -= deg;
 
 	if (Health <= 0) {
-		Kill();
+		//Kill();
 	}
 
 }
